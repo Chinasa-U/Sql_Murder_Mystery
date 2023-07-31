@@ -1,3 +1,9 @@
+/*observe the dataset*/
+SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH
+FROM information_schema.columns
+WHERE TABLE_SCHEMA = 'sqlmurderschema'
+ORDER BY TABLE_NAME, ORDINAL_POSITION;
+
 /*observe the crime scene report table*/
 select * 
 from crime_scene_report;
@@ -34,6 +40,7 @@ JOIN drivers_license AS dr
 ON pe.license_id = dr.id 
 WHERE  gm.id LIKE '%48Z%' AND  gm.membership_status='gold'  
                 AND dr.plate_number like '%H42W%'; 
+/*the query showed 'Jeremy Bowers' as the  suspect*/
 
 /* to confirm if the two witness saw the same person, i queried the tables using the description of the of 
 the first witness (Annabel miller),Using the date provided (january 09), and since his description was based on a week ago
@@ -71,9 +78,31 @@ insert into solution
  Values(1,' Jeremy Bowers');
  select * from solution;
  
- 
 /*use the mystery.knightlab.com to check the final answer and 'Jeremy Bower' was the correct suspect*/
 
+/*to find the real vallin , check the interview table for the suspect interview*/
+select * from interview;
+
+/* get the interview of Jeremy Bowers using his perso_id*/
+select * 
+from interview 
+where person_id = 67318;
+
+/*find the main suspect using join syntax*/
+select *
+ from drivers_license dr
+ join person pe 
+ on dr.id=pe.license_id
+ join facebook_event_checkin fa
+ on  fa.person_id = pe.id
+ where dr.hair_color = 'red'
+ and dr.gender = 'female' 
+ and dr.car_make = 'Tesla'
+ and dr.height in (65,66,67) and dr.car_model = 'model S'
+ and pe.license_id in (918773,291182,202298)
+ and  fa.event_name = 'SQL Symphony Concert' and fa.date like '201712%' and fa.person_id in (78881, 90700, 99716);
+ 
+/*the main suspect is "Miranda Priestly"*/
 
 
  
